@@ -16,7 +16,7 @@ function start_game(){
             grid.x = x_index;
             grid.y = y_index;
             grid.id = id;
-            grid.textContent = '';
+            grid.textContent = '_';
             grid.setAttribute('data-id', id);
             grid.addEventListener('click', () => check_grid(id, mines));
             row.append(grid);
@@ -56,7 +56,66 @@ function check_grid(id,mines){
             mines.forEach(mine => document.getElementById(mine).textContent = '!');
         }
         else{
-            grid.textContent = '0';
+            const mine_number = scan_neighbours(grid);
+            grid.textContent=String(mine_number);
+            grid.setAttribute('data-revealed','true');
+            if(mine_number === 0){
+                reveal_round(grid);
+            }
+        }
+    }
+}
+
+function scan_neighbours(grid){
+    const x = grid.x;
+    const y = grid.y;
+    let count = 0;
+
+    for(let dx = -1; dx <= 1; dx++){
+        for(let dy = -1; dy <= 1; dy++){
+            if (dx === 0 && dy === 0) continue; //skip current grid
+            const neighbour_x = x + dx;
+            const neighbour_y = y + dy;
+            //error handling - on edge, only will continue when value is >= 0 and smaller than amount of the grid 
+            if(neighbour_x >= 0 && neighbour_x < grid_x.length &&
+                neighbour_y >= 0 && neighbour_y <grid_y.length){
+                    const neighbour_id = grid_y[neighbour_y] + grid_x[neighbour_x];
+                    const neighbour = document.getElementById(neighbour_id);
+                    if(neighbour && neighbour.getAttribute('data-mine') === 'true'){
+                        count ++;
+                    }
+                }
+        }
+    }
+    return count;
+}
+
+function reveal_round(grid){
+    const x = grid.x;
+    const y = grid.y;
+    let count = 0;
+
+    for(let dx = -1; dx <= 1; dx++){
+        for(let dy = -1; dy <= 1; dy++){
+            if (dx === 0 && dy === 0) continue; //skip current grid
+            const neighbour_x = x + dx;
+            const neighbour_y = y + dy;
+            //error handling - on edge, only will continue when value is >= 0 and smaller than amount of the grid 
+            if(neighbour_x >= 0 && neighbour_x < grid_x.length &&
+                neighbour_y >= 0 && neighbour_y <grid_y.length){
+                    const neighbour_id = grid_y[neighbour_y] + grid_x[neighbour_x];
+                    const neighbour = document.getElementById(neighbour_id);
+                    
+                    if(neighbour && !neighbour.getAttribute('data-revealed')){
+                        const mine_number = scan_neighbours(neighbour);
+                        neighbour.textContent = String(mine_number);
+                        neighbour.setAttribute('data-revealed', 'true');
+                        
+                        if(mine_number === 0){
+                            reveal_round(neighbour);
+                        }
+                    }
+                }
         }
     }
 }
