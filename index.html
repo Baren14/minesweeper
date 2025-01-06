@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="game.js"></script>
     <link rel="stylesheet" href="style.css">
-    <title>Minesweeper</title>
+    <title>Baren's Minesweeper</title>
 </head>
-<body>
+<body oncontextmenu="return false;">
     <div id="head_section">
         <button id="start" onclick="start_game()">Start</button>
+        <input id="clock" readonly>
     </div>
     <div id="game_area">
         <div id="grids"></div>
     </div>
+
+    <script src="game.js"></script>
 </body>
 </html>

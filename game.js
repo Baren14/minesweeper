@@ -1,7 +1,8 @@
 const grid_x = ['0','1','2','3','4','5','6','7','8','9'];
 const grid_y = ['a','b','c','d','e','f','g','h','i','j'];
 const all_grids = new Set;
-//const start_button = document.getElementById('start');
+
+//GAME SECTION
 
 function start_game(){
     //grids for mines
@@ -21,6 +22,7 @@ function start_game(){
             grid.textContent = '_';
             grid.setAttribute('data-id', id);
             grid.addEventListener('click', () => check_grid(id, mines));
+            grid.addEventListener('contextmenu', () => flag(id));
             row.append(grid);
             all_grids.add(id);
         });
@@ -58,6 +60,7 @@ function check_grid(id,mines){
         if(mines.has(id)){
             document.getElementById(id).textContent = '!';
             mines.forEach(mine => document.getElementById(mine).textContent = '!');
+            stopwatch_stop();
             alert("you lost!")
         }
         else{
@@ -70,7 +73,21 @@ function check_grid(id,mines){
         }
     }
     if(check_if_all_clear()){
+        stopwatch_stop();
         alert("you win!");
+    }
+}
+
+function flag(id){
+    const grid = document.getElementById(id);
+    const isFlagged = grid.getAttribute('data-flagged') === 'true';
+    if(isFlagged){
+        grid.textContent = '_';
+        grid.setAttribute('data-flagged','false');
+    }
+    else{
+        grid.setAttribute('data-flagged','true');
+        grid.textContent = 'F';
     }
 }
 
@@ -137,4 +154,53 @@ function check_if_all_clear() {
         }
     }
     return true;
+}
+
+//GAME SECTION END
+
+//CLOCK SECTION
+const stopwatch_display = document.getElementById("clock");
+
+let min = 0;
+let sec = 0;
+let count = 0;
+let timer = false;
+
+document.getElementById('start').addEventListener('click', function(){
+    timer = true;
+    stopwatch_run();
+})
+
+function stopwatch_run(){
+    if(timer){
+        count++;
+        if(count == 100){
+            sec ++;
+            count = 0;
+        }
+        if(sec == 60){
+            min ++;
+            sec = 0;
+        }
+    }
+    let count_string = String(count);
+    let sec_string = String(sec);
+    let min_string = String(min);
+    if(count_string.length == 1){
+        count_string = '0' + count_string;
+    }
+    if(sec_string.length == 1){
+        sec_string = '0' + sec_string;
+    }
+    if(min_string.length == 1){
+        min_string = '0' + min_string;
+    }
+    let time_text = min_string + ':' + sec_string + ':' + count_string;
+    stopwatch_display.value = time_text;
+
+    setTimeout(stopwatch_run,10);
+}
+
+function stopwatch_stop(){
+    timer = false;
 }
