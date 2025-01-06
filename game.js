@@ -1,9 +1,11 @@
-const grid_x = ['0','1','2','3','4','5','6','7','8','9']
+const grid_x = ['0','1','2','3','4','5','6','7','8','9'];
 const grid_y = ['a','b','c','d','e','f','g','h','i','j'];
+const all_grids = new Set;
 //const start_button = document.getElementById('start');
 
 function start_game(){
     //grids for mines
+    document.getElementById('start').textContent='restart';
     const mine_grids = document.getElementById('grids');
     const mines = new Set();
     mine_grids.innerHTML = '';
@@ -20,6 +22,7 @@ function start_game(){
             grid.setAttribute('data-id', id);
             grid.addEventListener('click', () => check_grid(id, mines));
             row.append(grid);
+            all_grids.add(id);
         });
         mine_grids.append(row);
     });
@@ -34,6 +37,7 @@ function random_mine(mines){
         const y = Math.floor(Math.random() * 10);
         const mine = grid_y[y] + grid_x[x];
         mines.add(mine);
+        all_grids.delete(mine);
     }
     mines.forEach(mine => {
         console.log(mine);
@@ -63,6 +67,9 @@ function check_grid(id,mines){
                 reveal_round(grid);
             }
         }
+    }
+    if(check_if_all_clear()){
+        alert("you win!");
     }
 }
 
@@ -110,7 +117,7 @@ function reveal_round(grid){
                         const mine_number = scan_neighbours(neighbour);
                         neighbour.textContent = String(mine_number);
                         neighbour.setAttribute('data-revealed', 'true');
-                        
+
                         if(mine_number === 0){
                             reveal_round(neighbour);
                         }
@@ -118,4 +125,15 @@ function reveal_round(grid){
                 }
         }
     }
+}
+
+
+function check_if_all_clear() {
+    for (const id of all_grids) {
+        const grid = document.getElementById(id);
+        if (grid.getAttribute('data-revealed') !== 'true') {
+            return false;
+        }
+    }
+    return true;
 }
