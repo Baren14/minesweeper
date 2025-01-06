@@ -39,9 +39,9 @@ function random_mine(mines){
         mines.add(mine);
         all_grids.delete(mine);
     }
-    mines.forEach(mine => {
+    /*mines.forEach(mine => {
         console.log(mine);
-    });
+    });*/
 }
 
 function plant_mine(id){
@@ -58,6 +58,7 @@ function check_grid(id,mines){
         if(mines.has(id)){
             document.getElementById(id).textContent = '!';
             mines.forEach(mine => document.getElementById(mine).textContent = '!');
+            alert("you lost!")
         }
         else{
             const mine_number = scan_neighbours(grid);
