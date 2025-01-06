@@ -167,6 +167,9 @@ let count = 0;
 let timer = false;
 
 document.getElementById('start').addEventListener('click', function(){
+    min = 0;
+    sec = 0;
+    count = 0;
     timer = true;
     stopwatch_run();
 })
