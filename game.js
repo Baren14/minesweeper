@@ -201,7 +201,7 @@ function stopwatch_run(){
     let time_text = min_string + ':' + sec_string + ':' + count_string;
     stopwatch_display.value = time_text;
 
-    setTimeout(stopwatch_run,10);
+    setTimeout(stopwatch_run,100);
 }
 
 function stopwatch_stop(){
