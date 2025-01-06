@@ -4,7 +4,9 @@ const grid_y = ['a','b','c','d','e','f','g','h','i','j','k'];
 function start_game(){
     const mine_grids = document.getElementById('grids');
     mine_grids.innerHTML = '';
-    grid_x.forEach = () => {
-
+    grid_y.forEach = () => {
+        grid_x.forEach = () =>{
+            
+        }
     }
 }
